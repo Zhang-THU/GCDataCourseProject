@@ -1,0 +1,90 @@
+#Getting and Cleaning Data Course Project
+This README file contains all the procedures done to the data as well as the explanations for all the code.  
+First,we need to load all the data from the file.
+```{r load_data}
+xtrain <- read.table(".\\UCI HAR Dataset\\train\\X_train.txt")
+ytrain <- read.table(".\\UCI HAR Dataset\\train\\y_train.txt")
+subject_train <- read.table(".\\UCI HAR Dataset\\train\\subject_train.txt")
+xtest <- read.table(".\\UCI HAR Dataset\\test\\X_test.txt")
+ytest <- read.table(".\\UCI HAR Dataset\\test\\y_test.txt")
+subject_test <- read.table(".\\UCI HAR Dataset\\test\\subject_test.txt")
+```
+  
+  
+As we can see, all the three files in training and test set have exact same columns correspondingly (the code to exam the dimension is ommited here for concision), we can use rbind function to merge the data.
+```{r merge_data}
+x <- rbind(xtest,xtrain)
+y <- rbind(ytest,ytrain)
+subject <- rbind(subject_test,subject_train)
+```
+According to the given readme file, names for all the columns are stored in a seperate file. So we need to load that file and do some simple cleaning.
+  
+```{r loda_data_2}
+feature <- read.table(".\\UCI HAR Dataset\\features.txt")
+feature <- feature[,2]
+feature <- as.character(feature)
+```
+  
+Then we can give names to all the columns. In addition, we also give name "Subject"" and "Activity" to its corresponding variable. 
+```{r give_name}
+names(x) <- feature
+names(subject) <- "Subject"
+names(y) <- "Activity"
+```
+  
+As required, we extract only the measurements on the mean and standard deviation. So I use grepl function to select all the columns whose name include "mean" or "std".
+```{r select}
+select <- grepl("std",feature) | grepl("mean",feature)
+x <- x[,select]
+```
+  
+  
+After selecting the column, I use cbind function to add subject and activity column to the data.
+```{r merge2}
+data <- cbind(subject,x)
+data <- cbind(y,data)
+```
+  
+As required in step 3, we need to change activity number to their corresponding name which is stored in another file activitiy_labels. The following code is for loading the data and all the substitution.
+```{r name_activity}
+labels <- read.table(".\\UCI HAR Dataset\\activity_labels.txt")
+labels[,2] <- as.character(labels[,2])
+data$Activity <- gsub(labels[1,1],labels[1,2],data$Activity)
+data$Activity <- gsub(labels[2,1],labels[2,2],data$Activity)
+data$Activity <- gsub(labels[3,1],labels[3,2],data$Activity)
+data$Activity <- gsub(labels[4,1],labels[4,2],data$Activity)
+data$Activity <- gsub(labels[5,1],labels[5,2],data$Activity)
+data$Activity <- gsub(labels[6,1],labels[6,2],data$Activity)
+```
+  
+After that, we need to modify the column names so that they are more descriptive. Concretely, here is what I do: delete all the brackets and dashes; use the whole word to substitute abbreviation (e.g magnitude for Mag, etc); according to features_info file, make it clear that t stands for time domain and f for frequency domain; change other unresonble spellings. Here is the code:
+```{r tidy}
+names(data) <- gsub("\\()","",names(data))
+names(data) <- gsub("-"," ",names(data))
+names(data) <- gsub("Acc","Accelerometer ",names(data))
+names(data) <- gsub("Gyro","Gyroscope ",names(data))
+names(data) <- gsub("Mag","magnitude ",names(data))
+names(data) <- gsub("tBody","Time domain body ",names(data))
+names(data) <- gsub("tGravity","Time domain gravity ",names(data))
+names(data) <- gsub("fBodyBody","fBody",names(data))
+names(data) <- gsub("fBody","Frequency domain body ",names(data))
+names(data) <- gsub("mean","mean value ",names(data))
+names(data) <- gsub("std","standard deviation ",names(data))
+names(data) <- gsub("  "," ",names(data))
+#exam the data, which is omiited in stript file
+names(data)
+```
+
+As required in step 5,we need to create a second, independent tidy data set with the average of each variable for each activity and each subject. I use melt and dcast function to accomplish that.
+```{r reshape}
+library(reshape2)
+datamelt <- melt(data,id=c("Activity","Subject"))
+newdata <- dcast(datamelt,Activity + Subject ~ variable,mean)
+#exam the data,which is omiited in stript file
+newdata[1:10,1:3]
+```
+
+Finally, we output the data in a new file called data.txt.
+```{r output}
+write.table(newdata,"data.txt",col.names=FALSE)
+```

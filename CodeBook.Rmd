@@ -1,0 +1,36 @@
+#Code Book 
+##(Adapted and modified based on features_info.txt) 
+  
+  
+The features selected for this database come from the accelerometer and gyroscope 3-axial raw signals. These time domain signals  were captured at a constant rate of 50 Hz. Then they were filtered using a median filter and a 3rd order low pass Butterworth filter with a corner frequency of 20 Hz to remove noise. Similarly, the acceleration signal was then separated into body and gravity acceleration signals (Time domain gravity Accelerometer and Time domain body Accelerometer) using another low pass Butterworth filter with a corner frequency of 0.3 Hz. 
+  
+Subsequently, the body linear acceleration and angular velocity were derived in time to obtain Jerk signals (Time domain body Gyroscope Jerk and Time domain body Accelerometer Jerk). Also the magnitude of these three-dimensional signals were calculated using the Euclidean norm (Time domain body Accelerometer Jerk magnitude, Time domain gravity Accelerometer magnitude, Time domain body Accelerometer Jerk magnitude, Time domain body Gyroscope magnitude, Time domain body Gyroscope Jerk magnitude). 
+  
+Finally a Fast Fourier Transform (FFT) was applied to some of these signals producingFrequency domain body Accelerometer XYZ, Frequency domain body Accelerometer Jerk XYZ, Frequency domain body Gyroscope,Frequency domain body Accelerometer Jerk magnitude, Frequency domain body Accelerometer magnitude, Frequency domain body Gyroscope Jerk magnitude mean. 
+  
+These signals were used to estimate variables of the feature vector for each pattern:  
+'-XYZ' is used to denote 3-axial signals in the X, Y and Z directions.
+  
+Time domain body Accelerometer-XYZ  
+Time domain gravity Accelerometer-XYZ  
+Time domain body Accelerometer Jerk-XYZ  
+Time domain body Gyroscope-XYZ  
+Time domain body Gyroscope Jerk-XYZ  
+Time domain body Accelerometer magnitude  
+Time domain gravity Accelerometer magnitude  
+Time domain body Accelerometer Jerk magnitude  
+Time domain body Gyroscope magnitude  
+Time domain body Gyroscope Jerkmagnitude  
+Frequency domain body Accelerometer-XYZ  
+Frequency domain body Accelerometer Jerk-XYZ  
+Frequency domain body Gyroscope-XYZ  
+Frequency domain body Accelerometer magnitude  
+Frequency domain body Accelerometer Jerk magnitude  
+Frequency domain body Gyroscpe magnitude  
+Frequency domain body Gyroscpe Jerk magnitude  
+  
+                         
+Only the mean value and standard deviation of these signals are estimated.  
+  
+In addition, the activity label is stored in the first column and the subject is stored in the second column. The columns are sorted by subject number and activity label.
+  
