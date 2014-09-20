@@ -30,7 +30,7 @@ Frequency domain body Gyroscpe magnitude
 Frequency domain body Gyroscpe Jerk magnitude  
   
                          
-Only the mean value and standard deviation of these signals are estimated.  
+Only the mean value and standard deviation of these signals are estimated. And they are normalized and bounded within [-1,1] with each feature vector in a row on the text file.
   
 In addition, the activity label is stored in the first column and the subject is stored in the second column. The columns are sorted by subject number and activity label.
   
